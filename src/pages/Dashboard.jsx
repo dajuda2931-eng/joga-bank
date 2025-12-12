@@ -44,6 +44,16 @@ export default function Dashboard() {
         }).format(value)
     }
 
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        })
+    }
+
     return (
         <div className="space-y-6">
             {/* Balance Card */}
@@ -113,6 +123,9 @@ export default function Dashboard() {
                                         <div className="text-right">
                                             <p className={`font-bold text-base ${isReceived ? 'text-teal-600' : 'text-gray-900'}`}>
                                                 {isReceived ? '+' : '-'}{formatCurrency(tx.amount)}
+                                            </p>
+                                            <p className="text-xs text-gray-400 mt-1">
+                                                {formatDate(tx.created_at)}
                                             </p>
                                         </div>
                                     </div>

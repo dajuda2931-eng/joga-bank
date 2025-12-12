@@ -93,27 +93,32 @@ export default function Transfer() {
         }
     }
 
-    const handleScanSuccess = (decodedText) => {
+    const handleScanSuccess = async (decodedText) => {
+        setShowScanner(false)
+
+        let query = decodedText
+        let detectedAmount = null
+
         try {
-            // Tenta fazer parse como JSON (novo formato com valor)
             const data = JSON.parse(decodedText)
             if (data.id) {
-                setSearchQuery(data.id)
+                query = data.id
                 if (data.amount) {
-                    setAmount(data.amount.toString())
+                    detectedAmount = data.amount.toString()
                 }
-                setShowScanner(false)
-                setTimeout(() => handleSearch(null, data.id), 100)
-                return
             }
         } catch (e) {
-            // Se falhar, assume que é apenas o ID (formato antigo/simples)
             console.log('QR Code não é JSON, usando como string simples')
         }
 
-        setSearchQuery(decodedText)
-        setShowScanner(false)
-        setTimeout(() => handleSearch(null, decodedText), 100)
+        setSearchQuery(query)
+        if (detectedAmount) {
+            setAmount(detectedAmount)
+        }
+
+        // Aguarda um pequeno delay para garantir que o componente principal renderize
+        // antes de iniciar a busca (opcional, mas ajuda na transição visual)
+        setTimeout(() => handleSearch(null, query), 50)
     }
 
     const handleSearch = async (e, queryOverride = null) => {

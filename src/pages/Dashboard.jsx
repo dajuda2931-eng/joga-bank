@@ -104,11 +104,19 @@ export default function Dashboard() {
                                 <Card key={tx.id} className="p-4 hover:shadow-md transition-all duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 flex-1">
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isReceived ? 'bg-teal-50 dark:bg-teal-900/30' : 'bg-gray-100 dark:bg-gray-700'}`}>
-                                                {isReceived ? (
-                                                    <ArrowDownLeft className="w-5 h-5 text-teal-600" />
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center overflow-hidden ${isReceived ? 'bg-teal-50 dark:bg-teal-900/30' : 'bg-gray-100 dark:bg-gray-700'}`}>
+                                                {(isReceived ? tx.sender?.avatar_url : tx.receiver?.avatar_url) ? (
+                                                    <img
+                                                        src={isReceived ? tx.sender.avatar_url : tx.receiver.avatar_url}
+                                                        alt="Avatar"
+                                                        className="w-full h-full object-cover"
+                                                    />
                                                 ) : (
-                                                    <ArrowUpRight className="w-5 h-5 text-gray-600" />
+                                                    isReceived ? (
+                                                        <ArrowDownLeft className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                                                    ) : (
+                                                        <ArrowUpRight className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                                                    )
                                                 )}
                                             </div>
                                             <div className="flex-1 min-w-0">

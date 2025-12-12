@@ -24,16 +24,19 @@ export default function Layout() {
                             <button onClick={toggleTheme} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
                                 {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
                             </button>
-                            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                                <Wallet className="w-5 h-5" />
-                            </div>
+                            <Link to="/profile" className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden bg-white/20 hover:bg-white/30 transition-colors border-2 border-transparent hover:border-white/50">
+                                {profile?.avatar_url ? (
+                                    <img src={profile.avatar_url} alt="Perfil" className="w-full h-full object-cover" />
+                                ) : (
+                                    <User className="w-5 h-5" />
+                                )}
+                            </Link>
                             <button onClick={signOut} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
                                 <LogOut className="w-5 h-5" />
                             </button>
                         </div>
                     </div>
                 </header>
-
                 {/* Content */}
                 <main className="p-4">
                     <Outlet />

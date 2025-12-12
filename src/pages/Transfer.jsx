@@ -311,8 +311,12 @@ export default function Transfer() {
                                                 onClick={() => selectContact(contact)}
                                                 className="flex-1 flex items-center gap-3 text-left"
                                             >
-                                                <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold group-hover:bg-teal-200 dark:group-hover:bg-teal-900/50 transition-colors">
-                                                    {contact.contact?.username?.[0]?.toUpperCase()}
+                                                <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold group-hover:bg-teal-200 dark:group-hover:bg-teal-900/50 transition-colors overflow-hidden">
+                                                    {contact.contact?.avatar_url ? (
+                                                        <img src={contact.contact.avatar_url} alt={contact.nickname} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        contact.contact?.username?.[0]?.toUpperCase()
+                                                    )}
                                                 </div>
                                                 <div>
                                                     <p className="font-medium text-gray-900 dark:text-white">{contact.nickname || contact.contact?.full_name}</p>
@@ -337,8 +341,12 @@ export default function Transfer() {
                         {/* Receiver Info */}
                         <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold text-lg">
-                                    {receiver.username[0].toUpperCase()}
+                                <div className="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold text-lg overflow-hidden">
+                                    {receiver.avatar_url ? (
+                                        <img src={receiver.avatar_url} alt={receiver.full_name} className="w-full h-full object-cover" />
+                                    ) : (
+                                        receiver.username[0].toUpperCase()
+                                    )}
                                 </div>
                                 <div>
                                     <p className="font-semibold text-gray-900 dark:text-white">{receiver.full_name}</p>

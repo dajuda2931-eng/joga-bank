@@ -48,3 +48,6 @@ begin
   values (sender_id, receiver_id, amount, 'Transferência via App');
 end;
 $$;
+
+-- 4. Habilita Realtime para Transações (ESSENCIAL para o QR Code funcionar)
+alter publication supabase_realtime add table transactions;

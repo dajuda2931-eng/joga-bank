@@ -16,12 +16,23 @@ export function ReceiveQR({ user, onClose }) {
         ? JSON.stringify({ id: user.id, amount: parseFloat(amount) })
         : user.id
 
-    useEffect(() => {
-        // Solicita permissão para notificações ao montar o componente
-        if (Notification.permission === 'default') {
-            Notification.requestPermission()
+    const [notificationPermission, setNotificationPermission] = useState(Notification.permission)
+
+    // Gera o valor do QR Code: string simples (ID) ou JSON string ({id, amount})
+    const qrValue = amount && parseFloat(amount) > 0
+        ? JSON.stringify({ id: user.id, amount: parseFloat(amount) })
+        : user.id
+
+    const requestNotificationPermission = async () => {
+        const permission = await Notification.requestPermission()
+        setNotificationPermission(permission)
+        if (permission === 'granted') {
+            new Notification('Notificações Ativadas! 🔔', {
+                body: 'Você será avisado quando receber um pagamento.',
+                icon: '/icon-192.png'
+            })
         }
-    }, [])
+    }
 
     useEffect(() => {
         const channel = supabase
@@ -127,6 +138,20 @@ export function ReceiveQR({ user, onClose }) {
                         <Copy className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300" />
                     )}
                 </button>
+
+                {notificationPermission === 'default' && (
+                    <button
+                        onClick={requestNotificationPermission}
+                        className="text-xs text-teal-600 dark:text-teal-400 hover:underline mt-2"
+                    >
+                        Ativar notificações de pagamento
+                    </button>
+                )}
+                {notificationPermission === 'denied' && (
+                    <p className="text-xs text-red-500 mt-2">
+                        Notificações bloqueadas no navegador
+                    </p>
+                )}
             </div>
 
             <div className="flex items-center gap-3 text-sm text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30 px-4 py-2 rounded-full animate-pulse">

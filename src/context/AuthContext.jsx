@@ -43,6 +43,10 @@ export const AuthProvider = ({ children }) => {
             setProfile(data)
         } catch (error) {
             console.error('Error fetching profile:', error)
+            // Se o erro for sobre a coluna avatar_url não existir, avisa o usuário (dev mode)
+            if (error.message?.includes('avatar_url')) {
+                console.warn('Coluna avatar_url não encontrada. Execute o script add_avatar_column.sql no Supabase.')
+            }
         } finally {
             setLoading(false)
         }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import { Button } from '../components/Button'
@@ -21,6 +21,13 @@ export default function Transfer() {
     const [showContacts, setShowContacts] = useState(true)
     const [showScanner, setShowScanner] = useState(false)
     const [showReceive, setShowReceive] = useState(false)
+    const submitButtonRef = useRef(null)
+
+    useEffect(() => {
+        if (receiver && amount && submitButtonRef.current) {
+            submitButtonRef.current.focus()
+        }
+    }, [receiver, amount])
 
     useEffect(() => {
         if (user) {
@@ -364,37 +371,4 @@ export default function Transfer() {
                                 </button>
                             )}
                         </div>
-
-                        {/* Amount Input */}
-                        <div className="space-y-2">
-                            <label className="text-sm text-gray-600">Valor</label>
-                            <div className="relative">
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    className="w-full text-4xl font-bold text-gray-900 bg-transparent focus:outline-none"
-                                    placeholder="0.00"
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    autoFocus
-                                />
-                            </div>
-                        </div>
-
-                        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-                        {/* Action Buttons */}
-                        <div className="grid grid-cols-2 gap-3">
-                            <Button variant="secondary" onClick={() => setReceiver(null)}>
-                                Voltar
-                            </Button>
-                            <Button onClick={handleTransfer} disabled={loading}>
-                                {loading ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : 'Enviar Moedas'}
-                            </Button>
-                        </div>
-                    </div>
-                )}
-            </Card>
-        </div>
-    )
 }

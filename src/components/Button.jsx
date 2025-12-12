@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Button = ({ children, variant = 'primary', className = '', ...props }) => {
+export const Button = React.forwardRef(({ children, variant = 'primary', className = '', ...props }, ref) => {
     const baseStyles = "w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200 transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2";
 
     const variants = {
@@ -12,10 +12,13 @@ export const Button = ({ children, variant = 'primary', className = '', ...props
 
     return (
         <button
+            ref={ref}
             className={`${baseStyles} ${variants[variant]} ${className}`}
             {...props}
         >
             {children}
         </button>
     );
-};
+});
+
+Button.displayName = 'Button';

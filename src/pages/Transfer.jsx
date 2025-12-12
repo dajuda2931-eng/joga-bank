@@ -36,9 +36,10 @@ export default function Transfer() {
                 .order('created_at', { ascending: false })
 
             if (error) throw error
-            setContacts(data)
+            setContacts(data || [])
         } catch (error) {
             console.error('Error fetching contacts:', error)
+            setContacts([])
         }
     }
 
@@ -151,8 +152,10 @@ export default function Transfer() {
     }
 
     const selectContact = (contact) => {
-        setReceiver(contact.contact)
-        setSearchQuery(contact.contact.username)
+        if (contact && contact.contact) {
+            setReceiver(contact.contact)
+            setSearchQuery(contact.contact.username || '')
+        }
     }
 
     if (showSuccess && receiver) {

@@ -13,24 +13,28 @@ const ProtectedRoute = ({ children }) => {
   return children
 }
 
+import { ErrorBoundary } from './components/ErrorBoundary'
+
 function App() {
   return (
-    <HashRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/transfer" element={<Transfer />} />
-            <Route path="/profile" element={<Profile />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
-    </HashRouter>
+    <ErrorBoundary>
+      <HashRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route element={
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
+            }>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/transfer" element={<Transfer />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+          </Routes>
+        </AuthProvider>
+      </HashRouter>
+    </ErrorBoundary>
   )
 }
 

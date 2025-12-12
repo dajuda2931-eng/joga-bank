@@ -32,7 +32,7 @@ export default function Transfer() {
                 .from('contacts')
                 .select(`
                     *,
-                    contact:contact_id(username, full_name)
+                    contact:contact_id(id, username, full_name)
                 `)
                 .order('created_at', { ascending: false })
 

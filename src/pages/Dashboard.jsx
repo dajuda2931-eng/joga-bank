@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
 import { Card } from '../components/Card'
-import { ArrowUpRight, ArrowDownLeft, Wallet } from 'lucide-react'
+import { ArrowUpRight, ArrowDownLeft, Coins } from 'lucide-react'
 
 export default function Dashboard() {
     const { profile, user } = useAuth()
@@ -66,7 +66,7 @@ export default function Dashboard() {
                             {profile ? formatCurrency(profile.balance) : '...'}
                         </h2>
                         <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0">
-                            <Wallet className="w-6 h-6 text-yellow-700" />
+                            <Coins className="w-6 h-6 text-yellow-700" />
                         </div>
                     </div>
 

@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { Loader2, CheckCircle2, Copy } from 'lucide-react'
 import { Button } from './Button'
 import { Input } from './Input'
+import { playSuccessSound } from '../utils/sound'
 
 export function ReceiveQR({ user, onClose }) {
     const [paymentReceived, setPaymentReceived] = useState(null)
@@ -31,9 +32,11 @@ export function ReceiveQR({ user, onClose }) {
                     // Se um valor específico foi solicitado, verifica se bate
                     if (amount && parseFloat(amount) > 0) {
                         if (Math.abs(parseFloat(payload.new.amount) - parseFloat(amount)) < 0.01) {
+                            playSuccessSound()
                             setPaymentReceived(payload.new)
                         }
                     } else {
+                        playSuccessSound()
                         setPaymentReceived(payload.new)
                     }
                 }

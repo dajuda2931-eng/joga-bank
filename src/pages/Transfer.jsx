@@ -8,6 +8,8 @@ import { QRScanner } from '../components/QRScanner'
 import { SuccessAnimation } from '../components/SuccessAnimation'
 import { Loader2, X, Camera, Trash2, QrCode } from 'lucide-react'
 import { ReceiveQR } from '../components/ReceiveQR'
+import { Receipt } from '../components/Receipt'
+import { playSuccessSound } from '../utils/sound'
 
 export default function Transfer() {
     const { user, profile, refreshProfile } = useAuth()
@@ -17,6 +19,7 @@ export default function Transfer() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [showSuccess, setShowSuccess] = useState(false)
+    const [lastTransaction, setLastTransaction] = useState(null)
     const [contacts, setContacts] = useState([])
     const [showContacts, setShowContacts] = useState(true)
     const [showScanner, setShowScanner] = useState(false)
@@ -180,6 +183,18 @@ export default function Transfer() {
 
             if (rpcError) throw rpcError
 
+            // Toca o som de sucesso
+            playSuccessSound()
+
+            // Cria objeto de transação para o recibo
+            setLastTransaction({
+                id: 'tx_' + Math.random().toString(36).substr(2, 9), // ID temporário visual já que a RPC não retorna o ID
+                amount: value,
+                created_at: new Date().toISOString(),
+                sender: { full_name: profile.full_name },
+                receiver: receiver
+            })
+
             setShowSuccess(true)
 
             setTimeout(() => {
@@ -209,24 +224,13 @@ export default function Transfer() {
         }
     }
 
-    if (showSuccess && receiver) {
+    if (showSuccess && lastTransaction) {
         return (
             <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-gray-900">Transferir</h2>
-                <Card className="overflow-hidden">
-                    <SuccessAnimation
-                        amount={amount}
-                        receiverUsername={receiver.username}
-                    />
-                    <div className="px-6 pb-6 pt-2">
-                        <Button
-                            className="w-full"
-                            onClick={resetForm}
-                        >
-                            Nova Transferência
-                        </Button>
-                    </div>
-                </Card>
+                <Receipt
+                    transaction={lastTransaction}
+                    onClose={resetForm}
+                />
             </div>
         )
     }

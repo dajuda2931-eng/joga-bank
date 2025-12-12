@@ -18,6 +18,7 @@ export default function Transfer() {
     const [showSuccess, setShowSuccess] = useState(false)
     const [contacts, setContacts] = useState([])
     const [showContacts, setShowContacts] = useState(true)
+    const [showScanner, setShowScanner] = useState(false)
 
     useEffect(() => {
         if (user) {

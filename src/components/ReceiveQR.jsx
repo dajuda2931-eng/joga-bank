@@ -17,6 +17,13 @@ export function ReceiveQR({ user, onClose }) {
         : user.id
 
     useEffect(() => {
+        // Solicita permissão para notificações ao montar o componente
+        if (Notification.permission === 'default') {
+            Notification.requestPermission()
+        }
+    }, [])
+
+    useEffect(() => {
         const channel = supabase
             .channel('incoming-transfers')
             .on(
@@ -33,10 +40,12 @@ export function ReceiveQR({ user, onClose }) {
                     if (amount && parseFloat(amount) > 0) {
                         if (Math.abs(parseFloat(payload.new.amount) - parseFloat(amount)) < 0.01) {
                             playSuccessSound()
+                            showNotification(payload.new)
                             setPaymentReceived(payload.new)
                         }
                     } else {
                         playSuccessSound()
+                        showNotification(payload.new)
                         setPaymentReceived(payload.new)
                     }
                 }
@@ -47,6 +56,15 @@ export function ReceiveQR({ user, onClose }) {
             supabase.removeChannel(channel)
         }
     }, [user.id, amount])
+
+    const showNotification = (transaction) => {
+        if (Notification.permission === 'granted') {
+            new Notification('Pagamento Recebido! 💰', {
+                body: `Você recebeu R$ ${parseFloat(transaction.amount).toFixed(2)}`,
+                icon: '/icon-192.png' // Certifique-se de que este ícone existe
+            })
+        }
+    }
 
     const copyToClipboard = () => {
         navigator.clipboard.writeText(qrValue)

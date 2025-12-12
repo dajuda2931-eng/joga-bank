@@ -40,7 +40,7 @@ export default function Login() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-teal-50 via-gray-50 to-gray-100">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-teal-50 via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
             <Card className="w-full max-w-md space-y-8 relative overflow-hidden">
                 {/* Background decoration */}
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 to-teal-600" />
@@ -49,10 +49,10 @@ export default function Login() {
                     <div className="mx-auto w-16 h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-500/20 mb-6">
                         <Wallet className="w-8 h-8 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                         {isLogin ? 'Bem-vindo de volta' : 'Criar conta'}
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 dark:text-gray-400">
                         {isLogin ? 'Acesse sua carteira digital' : 'Comece a transferir hoje mesmo'}
                     </p>
                 </div>
@@ -117,7 +117,7 @@ export default function Login() {
                     <button
                         type="button"
                         onClick={() => setIsLogin(!isLogin)}
-                        className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                     >
                         {isLogin ? 'Não tem uma conta? Cadastre-se' : 'Já tem uma conta? Entre'}
                     </button>

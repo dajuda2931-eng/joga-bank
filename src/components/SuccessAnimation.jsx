@@ -62,21 +62,21 @@ export const SuccessAnimation = ({ amount, receiverUsername, onClose }) => {
 
                 {/* Success message */}
                 <div className="space-y-3 animate-bounce-in" style={{ animationDelay: '0.3s' }}>
-                    <h3 className="text-3xl font-bold text-gray-900">
+                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
                         Transferência Realizada! 🎉
                     </h3>
-                    <div className="inline-block px-6 py-3 bg-emerald-50 rounded-2xl border border-emerald-200 animate-shimmer">
-                        <p className="text-2xl font-bold text-emerald-700">
+                    <div className="inline-block px-6 py-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl border border-emerald-200 dark:border-emerald-800 animate-shimmer">
+                        <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">
                             R$ {parseFloat(amount).toFixed(2)}
                         </p>
                     </div>
-                    <p className="text-gray-900 text-lg">
-                        enviado para <span className="font-bold text-emerald-700">@{receiverUsername}</span>
+                    <p className="text-gray-900 dark:text-gray-200 text-lg">
+                        enviado para <span className="font-bold text-emerald-700 dark:text-emerald-400">@{receiverUsername}</span>
                     </p>
                 </div>
 
                 {/* Success details */}
-                <div className="flex items-center justify-center gap-2 text-emerald-700 animate-bounce-in"
+                <div className="flex items-center justify-center gap-2 text-emerald-700 dark:text-emerald-400 animate-bounce-in"
                     style={{ animationDelay: '0.5s' }}>
                     <CheckCircle className="w-5 h-5" />
                     <span className="text-sm font-medium">Transação concluída com sucesso</span>

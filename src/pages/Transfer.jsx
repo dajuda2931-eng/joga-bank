@@ -338,7 +338,7 @@ export default function Transfer() {
                                             </button>
                                             <button
                                                 onClick={(e) => deleteContact(e, contact.id)}
-                                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors opacity-100 md:opacity-0 md:group-hover:opacity-100"
                                                 title="Excluir contato"
                                             >
                                                 <Trash2 className="w-4 h-4" />

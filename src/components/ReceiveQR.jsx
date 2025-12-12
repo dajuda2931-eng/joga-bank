@@ -3,13 +3,19 @@ import QRCode from 'react-qr-code'
 import { supabase } from '../lib/supabase'
 import { Loader2, CheckCircle2, Copy } from 'lucide-react'
 import { Button } from './Button'
+import { Input } from './Input'
 
 export function ReceiveQR({ user, onClose }) {
     const [paymentReceived, setPaymentReceived] = useState(null)
+    const [amount, setAmount] = useState('')
     const [copied, setCopied] = useState(false)
 
+    // Gera o valor do QR Code: string simples (ID) ou JSON string ({id, amount})
+    const qrValue = amount && parseFloat(amount) > 0
+        ? JSON.stringify({ id: user.id, amount: parseFloat(amount) })
+        : user.id
+
     useEffect(() => {
-        // Inscreve-se para ouvir novas transações onde o receiver_id é o usuário atual
         const channel = supabase
             .channel('incoming-transfers')
             .on(
@@ -22,7 +28,14 @@ export function ReceiveQR({ user, onClose }) {
                 },
                 (payload) => {
                     console.log('Payment received!', payload)
-                    setPaymentReceived(payload.new)
+                    // Se um valor específico foi solicitado, verifica se bate
+                    if (amount && parseFloat(amount) > 0) {
+                        if (Math.abs(parseFloat(payload.new.amount) - parseFloat(amount)) < 0.01) {
+                            setPaymentReceived(payload.new)
+                        }
+                    } else {
+                        setPaymentReceived(payload.new)
+                    }
                 }
             )
             .subscribe()
@@ -30,10 +43,10 @@ export function ReceiveQR({ user, onClose }) {
         return () => {
             supabase.removeChannel(channel)
         }
-    }, [user.id])
+    }, [user.id, amount])
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(user.id)
+        navigator.clipboard.writeText(qrValue)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
@@ -57,9 +70,19 @@ export function ReceiveQR({ user, onClose }) {
 
     return (
         <div className="flex flex-col items-center space-y-6 py-4">
+            <div className="w-full max-w-xs">
+                <Input
+                    type="number"
+                    placeholder="Valor (Opcional)"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="text-center"
+                />
+            </div>
+
             <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
                 <QRCode
-                    value={user.id}
+                    value={qrValue}
                     size={200}
                     level="H"
                     fgColor="#0f172a"
@@ -67,12 +90,16 @@ export function ReceiveQR({ user, onClose }) {
             </div>
 
             <div className="text-center space-y-2">
-                <p className="text-sm text-gray-500">Seu ID de usuário</p>
+                <p className="text-sm text-gray-500">
+                    {amount ? `QR Code para receber R$ ${amount}` : 'Seu ID de usuário'}
+                </p>
                 <button
                     onClick={copyToClipboard}
                     className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors mx-auto group"
                 >
-                    <span className="font-mono font-medium text-gray-700">{user.id}</span>
+                    <span className="font-mono font-medium text-gray-700 truncate max-w-[200px]">
+                        {user.id}
+                    </span>
                     {copied ? (
                         <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                     ) : (
@@ -83,7 +110,7 @@ export function ReceiveQR({ user, onClose }) {
 
             <div className="flex items-center gap-3 text-sm text-teal-600 bg-teal-50 px-4 py-2 rounded-full animate-pulse">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Aguardando pagamento...
+                {amount ? `Aguardando R$ ${amount}...` : 'Aguardando pagamento...'}
             </div>
         </div>
     )

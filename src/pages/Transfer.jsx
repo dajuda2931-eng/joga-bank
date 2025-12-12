@@ -94,6 +94,23 @@ export default function Transfer() {
     }
 
     const handleScanSuccess = (decodedText) => {
+        try {
+            // Tenta fazer parse como JSON (novo formato com valor)
+            const data = JSON.parse(decodedText)
+            if (data.id) {
+                setSearchQuery(data.id)
+                if (data.amount) {
+                    setAmount(data.amount.toString())
+                }
+                setShowScanner(false)
+                setTimeout(() => handleSearch(null, data.id), 100)
+                return
+            }
+        } catch (e) {
+            // Se falhar, assume que é apenas o ID (formato antigo/simples)
+            console.log('QR Code não é JSON, usando como string simples')
+        }
+
         setSearchQuery(decodedText)
         setShowScanner(false)
         setTimeout(() => handleSearch(null, decodedText), 100)

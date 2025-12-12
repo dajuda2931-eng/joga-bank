@@ -12,6 +12,12 @@
   --text-secondary: #757575;
   --border: #E0E0E0;
   --black: #000000;
+
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 body {

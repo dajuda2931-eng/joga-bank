@@ -55,28 +55,28 @@ export const SuccessAnimation = ({ amount, receiverUsername, onClose }) => {
                     </div>
 
                     {/* Sparkles */}
-                    <Sparkles className="absolute -top-2 -right-2 w-8 h-8 text-yellow-400 animate-float" />
-                    <Sparkles className="absolute -bottom-2 -left-2 w-6 h-6 text-yellow-300 animate-float"
+                    <Sparkles className="absolute -top-2 -right-2 w-8 h-8 text-emerald-600 animate-float" />
+                    <Sparkles className="absolute -bottom-2 -left-2 w-6 h-6 text-emerald-600 animate-float"
                         style={{ animationDelay: '0.5s' }} />
                 </div>
 
                 {/* Success message */}
                 <div className="space-y-3 animate-bounce-in" style={{ animationDelay: '0.3s' }}>
-                    <h3 className="text-3xl font-bold text-white">
+                    <h3 className="text-3xl font-bold text-gray-900">
                         Transferência Realizada! 🎉
                     </h3>
-                    <div className="inline-block px-6 py-3 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 rounded-2xl border border-emerald-500/30 animate-shimmer">
-                        <p className="text-2xl font-bold text-emerald-400">
+                    <div className="inline-block px-6 py-3 bg-emerald-50 rounded-2xl border border-emerald-200 animate-shimmer">
+                        <p className="text-2xl font-bold text-emerald-700">
                             R$ {parseFloat(amount).toFixed(2)}
                         </p>
                     </div>
-                    <p className="text-gray-300 text-lg">
-                        enviado para <span className="font-bold text-white">@{receiverUsername}</span>
+                    <p className="text-gray-900 text-lg">
+                        enviado para <span className="font-bold text-emerald-700">@{receiverUsername}</span>
                     </p>
                 </div>
 
                 {/* Success details */}
-                <div className="flex items-center justify-center gap-2 text-emerald-400 animate-bounce-in"
+                <div className="flex items-center justify-center gap-2 text-emerald-700 animate-bounce-in"
                     style={{ animationDelay: '0.5s' }}>
                     <CheckCircle className="w-5 h-5" />
                     <span className="text-sm font-medium">Transação concluída com sucesso</span>

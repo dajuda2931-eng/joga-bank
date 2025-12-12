@@ -59,10 +59,10 @@ export default function Dashboard() {
             {/* Balance Card */}
             <Card className="p-8">
                 <div className="space-y-4">
-                    <p className="text-sm text-gray-600">Saldo Disponível</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Saldo Disponível</p>
 
                     <div className="flex items-center gap-3">
-                        <h2 className="text-5xl font-bold text-gray-900">
+                        <h2 className="text-5xl font-bold text-gray-900 dark:text-white">
                             {profile ? formatCurrency(profile.balance) : '...'}
                         </h2>
                         <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0">
@@ -72,16 +72,16 @@ export default function Dashboard() {
 
                     <p className="text-sm text-gray-500">Moedas disponíveis</p>
 
-                    <div className="pt-4 border-t border-gray-100">
-                        <p className="text-xs text-gray-500 mb-1">Seu ID da conta</p>
-                        <p className="text-lg font-semibold text-gray-900">{user?.id?.slice(0, 8) || '...'}</p>
+                    <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Seu ID da conta</p>
+                        <p className="text-lg font-semibold text-gray-900 dark:text-white">{user?.id?.slice(0, 8) || '...'}</p>
                     </div>
                 </div>
             </Card>
 
             {/* Transactions History */}
             <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Histórico de Transações</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Histórico de Transações</h3>
 
                 <div className="space-y-3">
                     {loading ? (
@@ -104,7 +104,7 @@ export default function Dashboard() {
                                 <Card key={tx.id} className="p-4 hover:shadow-md transition-all duration-200">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 flex-1">
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isReceived ? 'bg-teal-50' : 'bg-gray-100'}`}>
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isReceived ? 'bg-teal-50 dark:bg-teal-900/30' : 'bg-gray-100 dark:bg-gray-700'}`}>
                                                 {isReceived ? (
                                                     <ArrowDownLeft className="w-5 h-5 text-teal-600" />
                                                 ) : (
@@ -112,7 +112,7 @@ export default function Dashboard() {
                                                 )}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="font-semibold text-gray-900 text-sm">
+                                                <p className="font-semibold text-gray-900 dark:text-white text-sm">
                                                     {isReceived ? tx.sender?.full_name : tx.receiver?.full_name}
                                                 </p>
                                                 <p className="text-xs text-gray-500">
@@ -121,7 +121,7 @@ export default function Dashboard() {
                                             </div>
                                         </div>
                                         <div className="text-right">
-                                            <p className={`font-bold text-base ${isReceived ? 'text-teal-600' : 'text-gray-900'}`}>
+                                            <p className={`font-bold text-base ${isReceived ? 'text-teal-600 dark:text-teal-400' : 'text-gray-900 dark:text-white'}`}>
                                                 {isReceived ? '+' : '-'}{formatCurrency(tx.amount)}
                                             </p>
                                             <p className="text-xs text-gray-400 mt-1">

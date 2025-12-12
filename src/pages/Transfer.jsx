@@ -239,8 +239,8 @@ export default function Transfer() {
         return (
             <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-900">Escanear QR Code</h2>
-                    <button onClick={() => setShowScanner(false)} className="text-gray-600 hover:text-gray-900">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Escanear QR Code</h2>
+                    <button onClick={() => setShowScanner(false)} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
                         <X className="w-6 h-6" />
                     </button>
                 </div>
@@ -249,28 +249,12 @@ export default function Transfer() {
                         onScan={handleScanSuccess}
                         onClose={() => setShowScanner(false)}
                     />
-                    <p className="text-sm text-center text-gray-500 mt-4">Aponte a câmera para o QR Code</p>
-                </Card>
-            </div>
-        )
-    }
-
-    if (showReceive) {
-        return (
-            <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-900">Receber</h2>
-                    <button onClick={() => setShowReceive(false)} className="text-gray-600 hover:text-gray-900">
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
-                <Card>
-                    <ReceiveQR
-                        user={user}
-                        onClose={() => {
-                            setShowReceive(false)
-                            refreshProfile()
-                        }}
+                    <p className="text-sm text-center text-gray-500 dark:text-gray-400 mt-4">Aponte a câmera para o QR Code</p>
+                    user={user}
+                    onClose={() => {
+                        setShowReceive(false)
+                        refreshProfile()
+                    }}
                     />
                 </Card>
             </div>
@@ -279,7 +263,7 @@ export default function Transfer() {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Enviar Moedas</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Enviar Moedas</h2>
 
             <Card>
                 {!receiver ? (
@@ -320,24 +304,24 @@ export default function Transfer() {
                         </form>
 
                         {contacts.length > 0 && (
-                            <div className="pt-4 border-t border-gray-100">
-                                <h3 className="text-sm font-medium text-gray-700 mb-3">Contatos Salvos</h3>
+                            <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Contatos Salvos</h3>
                                 <div className="space-y-2">
                                     {contacts.map((contact) => (
                                         <div
                                             key={contact.id}
-                                            className="group relative flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                                            className="group relative flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                         >
                                             <button
                                                 onClick={() => selectContact(contact)}
                                                 className="flex-1 flex items-center gap-3 text-left"
                                             >
-                                                <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold group-hover:bg-teal-200 transition-colors">
+                                                <div className="w-10 h-10 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold group-hover:bg-teal-200 dark:group-hover:bg-teal-900/50 transition-colors">
                                                     {contact.contact?.username?.[0]?.toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <p className="font-medium text-gray-900">{contact.nickname || contact.contact?.full_name}</p>
-                                                    <p className="text-xs text-gray-500">@{contact.contact?.username}</p>
+                                                    <p className="font-medium text-gray-900 dark:text-white">{contact.nickname || contact.contact?.full_name}</p>
+                                                    <p className="text-xs text-gray-500 dark:text-gray-400">@{contact.contact?.username}</p>
                                                 </div>
                                             </button>
                                             <button
@@ -356,14 +340,14 @@ export default function Transfer() {
                 ) : (
                     <div className="space-y-6">
                         {/* Receiver Info */}
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                        <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-lg">
+                                <div className="w-12 h-12 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-700 dark:text-teal-400 font-bold text-lg">
                                     {receiver.username[0].toUpperCase()}
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-gray-900">{receiver.full_name}</p>
-                                    <p className="text-sm text-gray-500">@{receiver.username}</p>
+                                    <p className="font-semibold text-gray-900 dark:text-white">{receiver.full_name}</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">@{receiver.username}</p>
                                 </div>
                             </div>
                             {!contacts.some(c => c.contact_id === receiver.id) && (
@@ -378,12 +362,12 @@ export default function Transfer() {
 
                         {/* Amount Input */}
                         <div className="space-y-2">
-                            <label className="text-sm text-gray-600">Valor</label>
+                            <label className="text-sm text-gray-600 dark:text-gray-400">Valor</label>
                             <div className="relative">
                                 <input
                                     type="number"
                                     step="0.01"
-                                    className="w-full text-4xl font-bold text-gray-900 bg-transparent focus:outline-none"
+                                    className="w-full text-4xl font-bold text-gray-900 dark:text-white bg-transparent focus:outline-none"
                                     placeholder="0.00"
                                     value={amount}
                                     onChange={(e) => setAmount(e.target.value)}

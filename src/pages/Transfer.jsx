@@ -16,7 +16,59 @@ export default function Transfer() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [showSuccess, setShowSuccess] = useState(false)
-    const [showScanner, setShowScanner] = useState(false)
+    const [contacts, setContacts] = useState([])
+    const [showContacts, setShowContacts] = useState(true)
+
+    useEffect(() => {
+        if (user) {
+            fetchContacts()
+        }
+    }, [user])
+
+    const fetchContacts = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('contacts')
+                .select(`
+                    *,
+                    contact:contact_id(username, full_name)
+                `)
+                .order('created_at', { ascending: false })
+
+            if (error) throw error
+            setContacts(data)
+        } catch (error) {
+            console.error('Error fetching contacts:', error)
+        }
+    }
+
+    const saveContact = async () => {
+        if (!receiver) return
+
+        try {
+            const { error } = await supabase
+                .from('contacts')
+                .insert({
+                    user_id: user.id,
+                    contact_id: receiver.id,
+                    nickname: receiver.full_name
+                })
+
+            if (error) {
+                if (error.code === '23505') { // Unique violation
+                    setError('Contato já salvo.')
+                } else {
+                    throw error
+                }
+            } else {
+                fetchContacts()
+                alert('Contato salvo com sucesso!')
+            }
+        } catch (error) {
+            console.error('Error saving contact:', error)
+            setError('Erro ao salvar contato.')
+        }
+    }
 
     const handleScanSuccess = (decodedText) => {
         setSearchQuery(decodedText)
@@ -98,6 +150,11 @@ export default function Transfer() {
         setError('')
     }
 
+    const selectContact = (contact) => {
+        setReceiver(contact.contact)
+        setSearchQuery(contact.contact.username)
+    }
+
     if (showSuccess && receiver) {
         return (
             <div className="space-y-6">
@@ -146,41 +203,76 @@ export default function Transfer() {
 
             <Card>
                 {!receiver ? (
-                    <form onSubmit={handleSearch} className="space-y-4">
-                        <Input
-                            label="ID da Conta do Destinatário"
-                            placeholder="000000000"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            error={error}
-                        />
-                        <div className="grid grid-cols-2 gap-3">
-                            <Button
-                                type="button"
-                                variant="secondary"
-                                onClick={() => setShowScanner(true)}
-                            >
-                                <div className="flex items-center justify-center gap-2">
-                                    <Camera className="w-5 h-5" />
-                                    Ler QR
+                    <div className="space-y-6">
+                        <form onSubmit={handleSearch} className="space-y-4">
+                            <Input
+                                label="ID da Conta do Destinatário"
+                                placeholder="000000000"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                error={error}
+                            />
+                            <div className="grid grid-cols-2 gap-3">
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => setShowScanner(true)}
+                                >
+                                    <div className="flex items-center justify-center gap-2">
+                                        <Camera className="w-5 h-5" />
+                                        Ler QR
+                                    </div>
+                                </Button>
+                                <Button type="submit" disabled={loading}>
+                                    {loading ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : 'Buscar'}
+                                </Button>
+                            </div>
+                        </form>
+
+                        {contacts.length > 0 && (
+                            <div className="pt-4 border-t border-gray-100">
+                                <h3 className="text-sm font-medium text-gray-700 mb-3">Contatos Salvos</h3>
+                                <div className="space-y-2">
+                                    {contacts.map((contact) => (
+                                        <button
+                                            key={contact.id}
+                                            onClick={() => selectContact(contact)}
+                                            className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left group"
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold group-hover:bg-teal-200 transition-colors">
+                                                {contact.contact?.username?.[0]?.toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <p className="font-medium text-gray-900">{contact.nickname || contact.contact?.full_name}</p>
+                                                <p className="text-xs text-gray-500">@{contact.contact?.username}</p>
+                                            </div>
+                                        </button>
+                                    ))}
                                 </div>
-                            </Button>
-                            <Button type="submit" disabled={loading}>
-                                {loading ? <Loader2 className="animate-spin mx-auto w-5 h-5" /> : 'Buscar'}
-                            </Button>
-                        </div>
-                    </form>
+                            </div>
+                        )}
+                    </div>
                 ) : (
                     <div className="space-y-6">
                         {/* Receiver Info */}
-                        <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-                            <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-lg">
-                                {receiver.username[0].toUpperCase()}
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold text-lg">
+                                    {receiver.username[0].toUpperCase()}
+                                </div>
+                                <div>
+                                    <p className="font-semibold text-gray-900">{receiver.full_name}</p>
+                                    <p className="text-sm text-gray-500">@{receiver.username}</p>
+                                </div>
                             </div>
-                            <div>
-                                <p className="font-semibold text-gray-900">{receiver.full_name}</p>
-                                <p className="text-sm text-gray-500">@{receiver.username}</p>
-                            </div>
+                            {!contacts.some(c => c.contact_id === receiver.id) && (
+                                <button
+                                    onClick={saveContact}
+                                    className="text-xs font-medium text-teal-600 hover:text-teal-700 underline"
+                                >
+                                    Salvar Contato
+                                </button>
+                            )}
                         </div>
 
                         {/* Amount Input */}

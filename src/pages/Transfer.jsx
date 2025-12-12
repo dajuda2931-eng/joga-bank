@@ -250,12 +250,7 @@ export default function Transfer() {
                         onClose={() => setShowScanner(false)}
                     />
                     <p className="text-sm text-center text-gray-500 dark:text-gray-400 mt-4">Aponte a câmera para o QR Code</p>
-                    user={user}
-                    onClose={() => {
-                        setShowReceive(false)
-                        refreshProfile()
-                    }}
-                    />
+
                 </Card>
             </div>
         )
